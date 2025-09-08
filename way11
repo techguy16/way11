@@ -6,15 +6,24 @@ chmod 700 "$XDG_RUNTIME_DIR_WESTON"
 
 export WAYLAND_DISPLAY=wayland-1
 
-weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY &
+# if for some reason an app looks better with custom properties
+args=()
+
+weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" &
 WESTON_PID=$!
 
 while [ ! -S "$XDG_RUNTIME_DIR_WESTON/$WAYLAND_DISPLAY" ]; do
     sleep 0.2
 done
 
+sleep 0.2 #wait to destroy title?
+
 WESTON_WINID=$(wmctrl -l | grep "Weston Compositor" | awk -F " " '{print $1}' | head -n 1)
 xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+
+if [[ "$1" == "waydroid" ]] && [[ "$2" == "show-full-ui" ]]; then
+    wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
+fi
 
 XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@"
 
