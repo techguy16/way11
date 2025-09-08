@@ -1,0 +1,24 @@
+#!/bin/bash
+
+export XDG_RUNTIME_DIR=/tmp/weston-$USER
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+
+export WAYLAND_DISPLAY=wayland-x11-1
+
+weston --backend=x11-backend.so --socket="$WAYLAND_DISPLAY" &
+PID=$!
+
+while [ ! -S "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY" ]; do
+    sleep 0.1
+done
+
+WESTON_WINID=$(wmctrl -l | grep "Weston Compositor" | awk -F " " '{print $1}' | head -n 1)
+xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+
+GDK_WINDOW_STATE=maximized MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@" 
+
+# pgrep -f '$@*' | head -n 1
+
+kill -9 "$PID"
+exit 0
