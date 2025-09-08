@@ -1,5 +1,15 @@
 #!/bin/bash
 
+cat > "$HOME/.config/weston.ini"<< EOF
+[core] 
+idle-time=0 
+require-input=false 
+[shell] 
+panel-position=none 
+panel-location=none 
+background-color=0x000000ff
+EOF
+
 export XDG_RUNTIME_DIR=/tmp/weston-$USER
 mkdir -p "$XDG_RUNTIME_DIR"
 chmod 700 "$XDG_RUNTIME_DIR"
@@ -21,4 +31,6 @@ GDK_WINDOW_STATE=maximized MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland WAYLAND_DISP
 # pgrep -f '$@*' | head -n 1
 
 kill -9 "$PID"
+
+echo "" > "$HOME/.config/weston.ini"
 exit 0
