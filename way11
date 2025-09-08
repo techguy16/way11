@@ -1,36 +1,25 @@
 #!/bin/bash
 
-cat > "$HOME/.config/weston.ini"<< EOF
-[core] 
-idle-time=0 
-require-input=false 
-[shell] 
-panel-position=none 
-panel-location=none 
-background-color=0x000000ff
-EOF
+export XDG_RUNTIME_DIR_WESTON=/tmp/weston-$USER
+mkdir -p "$XDG_RUNTIME_DIR_WESTON"
+chmod 700 "$XDG_RUNTIME_DIR_WESTON"
 
-export XDG_RUNTIME_DIR=/tmp/weston-$USER
-mkdir -p "$XDG_RUNTIME_DIR"
-chmod 700 "$XDG_RUNTIME_DIR"
+export WAYLAND_DISPLAY=wayland-1
 
-export WAYLAND_DISPLAY=wayland-x11-1
+weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY &
+WESTON_PID=$!
 
-weston --backend=x11-backend.so --socket="$WAYLAND_DISPLAY" &
-PID=$!
-
-while [ ! -S "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY" ]; do
-    sleep 0.1
+while [ ! -S "$XDG_RUNTIME_DIR_WESTON/$WAYLAND_DISPLAY" ]; do
+    sleep 0.2
 done
 
 WESTON_WINID=$(wmctrl -l | grep "Weston Compositor" | awk -F " " '{print $1}' | head -n 1)
 xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
 
-GDK_WINDOW_STATE=maximized MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@" 
+XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@"
 
 # pgrep -f '$@*' | head -n 1
 
-kill -9 "$PID"
+kill -9 "$WESTON_PID"
 
-echo "" > "$HOME/.config/weston.ini"
 exit 0
