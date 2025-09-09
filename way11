@@ -4,7 +4,26 @@ export XDG_RUNTIME_DIR_WESTON=/tmp/weston-$USER
 mkdir -p "$XDG_RUNTIME_DIR_WESTON"
 chmod 700 "$XDG_RUNTIME_DIR_WESTON"
 
-export WAYLAND_DISPLAY=wayland-1
+for i in {1..40}; do
+    candidate="wayland-x11-$i"
+    if [[ ! -e "$XDG_RUNTIME_DIR_WESTON/$candidate" ]]; then
+        export WAYLAND_DISPLAY="$candidate"
+        echo "$@" > "$XDG_RUNTIME_DIR_WESTON/$candidate"
+        break
+    fi
+done
+
+# Echo config on launch
+cat > "$XDG_RUNTIME_DIR_WESTON/weston.ini" <<EOL
+[core]
+idle-time=0
+require-input=false
+xwayland=true
+[shell]
+panel-position=none
+panel-location=none
+background-color=0xff000000
+EOL
 
 # if for some reason an app looks better with custom properties
 args=()
@@ -15,10 +34,9 @@ if [[ "$1" == "google-chrome"* ]]; then
 elif [[ "$1" == "spotify" ]] || [[ "$1" == "code" ]]; then
     app_args+=("--enable-features=UseOzonePlatform" "--ozone-platform=wayland")
 fi
-echo "$args"
 
-echo "Loading weston..."
-XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" > /dev/null 2>&1 & 
+echo "Loading weston on $WAYLAND_DISPLAY..."
+XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" weston --config="$XDG_RUNTIME_DIR_WESTON/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" > /dev/null 2>&1 & 
 WESTON_PID=$!
 
 #while [ ! -S "$XDG_RUNTIME_DIR_WESTON/$WAYLAND_DISPLAY" ]; do
@@ -47,13 +65,24 @@ else
 fi
 
 # Set app title
-chmod +x ./helpers/set.sh
-./helpers/set.sh "$@" &
+#chmod +x ./helpers/set.sh
+#./helpers/set.sh "$@" &
+# Move to eliminate extra files
+set_title() {
+    wmctrl -r "Weston Compositor - screen0" -N "$1"
+}
+
+if [[ "$1" == "google-chrome"* ]]; then set_title "Google Chrome"
+elif [[ "$1" == "epiphany" ]] || [[ "$1" == "epiphany-browser" ]]; then set_title "GNOME Web"
+elif [[ "$1" == "waydroid" ]] && [[ "$4" == "com.mojang.minecraftedu" ]]; then set_title "Minecraft Education"
+else set_title "$(basename "$1" | sed 's/./\u&/')"
+fi
 
 XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@" "${app_args[@]}"
 
 # pgrep -f '$@*' | head -n 1
 
 kill -9 "$WESTON_PID"
+rm -rf "$XDG_RUNTIME_DIR_WESTON/$candidate"
 
 exit 0
