@@ -41,11 +41,6 @@ if [[ "$1" != "waydroid" ]]; then
 else
     if [[ "$2" != "app" ]]; then
         xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
-    else
-        if [[ "$4" == "com.mojang.minecraftedu" ]]; then
-            echo "Running Minecraft Edu"
-            wmctrl -r "Weston Compositor - screen0" -N "Minecraft Education"
-        fi
     fi
 fi
 
