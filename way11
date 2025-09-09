@@ -19,9 +19,9 @@ echo "Loading weston..."
 XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" > /dev/null 2>&1 & 
 WESTON_PID=$!
 
-while [ ! -S "$XDG_RUNTIME_DIR_WESTON/$WAYLAND_DISPLAY" ]; do
-    sleep 0.2
-done
+#while [ ! -S "$XDG_RUNTIME_DIR_WESTON/$WAYLAND_DISPLAY" ]; do
+#    sleep 0.2
+#done
 
 sleep 0.2 #wait to destroy title?
 
