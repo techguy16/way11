@@ -8,8 +8,15 @@ export WAYLAND_DISPLAY=wayland-1
 
 # if for some reason an app looks better with custom properties
 args=()
+app_args=()
+if [[ "$1" == "google-chrome"* ]]; then
+    args+=("--height" "768" "--width" "1024")
+    app_args+=("--start-maximized")
+fi
+echo "$args"
 
-weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" &
+echo "Loading weston..."
+XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" weston --config="$(pwd)/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" > /dev/null 2>&1 & 
 WESTON_PID=$!
 
 while [ ! -S "$XDG_RUNTIME_DIR_WESTON/$WAYLAND_DISPLAY" ]; do
@@ -19,13 +26,34 @@ done
 sleep 0.2 #wait to destroy title?
 
 WESTON_WINID=$(wmctrl -l | grep "Weston Compositor" | awk -F " " '{print $1}' | head -n 1)
-xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
 
 if [[ "$1" == "waydroid" ]] && [[ "$2" == "show-full-ui" ]]; then
     wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
+elif [[ "$WAY11_WINDOW" == "max" ]]; then
+    wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
 fi
 
-XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@"
+# Special app stuff...
+if [[ "$1" != "waydroid" ]]; then
+    if [[ "$WAY11_HIDECONTROLS" == "1" ]]; then
+        xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+    fi
+else
+    if [[ "$2" != "app" ]]; then
+        xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+    else
+        if [[ "$4" == "com.mojang.minecraftedu" ]]; then
+            echo "Running Minecraft Edu"
+            wmctrl -r "Weston Compositor - screen0" -N "Minecraft Education"
+        fi
+    fi
+fi
+
+# Set app title
+chmod +x ./helpers/set.sh
+./helpers/set.sh "$@" &
+
+XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@" "${app_args[@]}"
 
 # pgrep -f '$@*' | head -n 1
 
