@@ -12,6 +12,8 @@ app_args=()
 if [[ "$1" == "google-chrome"* ]]; then
     args+=("--height" "768" "--width" "1024")
     app_args+=("--start-maximized")
+elif [[ "$1" == "spotify" ]] || [[ "$1" == "code" ]]; then
+    app_args+=("--enable-features=UseOzonePlatform" "--ozone-platform=wayland")
 fi
 echo "$args"
 
