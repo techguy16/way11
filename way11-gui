@@ -1,0 +1,22 @@
+#!/bin/bash
+
+apps=()
+for i in ./apps/*; do
+	if [[ "$i" != *"icons" ]]; then
+		name=$(echo $i | cut -d'/' -f3-)
+		icon="apps/icons/$name.png"
+		apps+=("$icon" "$(echo $i | cut -d'/' -f3-)")
+	fi
+done
+
+data=$(yad --title="way11" --center --width=300 --height=400 \
+		--list --icon-size=32 --column="Icon:IMG" --column="App" --button="<b>Execute</b>!gtk-execute:0" \
+		--no-headers "${apps[@]}")
+EXVAL=$?
+
+if [ $EXVAL -eq 0 ]; then
+	app=$(echo $data | awk -F'|' '{print $2}')
+	directory="apps/$app"
+	command=$(cat "$directory")
+	./way11 $command
+fi
