@@ -15,6 +15,7 @@ chmod +x ~/way11/way11-gui
 ```
 
 To run way11: `~/way11/way11 <wayland app command>`
+
 To open way11's GUI: `~/way11/way11-gui`
 
 ### How?
