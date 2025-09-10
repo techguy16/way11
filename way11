@@ -82,6 +82,7 @@ if [[ "$1" == "google-chrome"* ]]; then set_title "Google Chrome"
 elif [[ "$1" == "epiphany" ]] || [[ "$1" == "epiphany-browser" ]]; then set_title "GNOME Web"
 elif [[ "$1" == "waydroid" ]] && [[ "$4" == "com.mojang.minecraftedu" ]]; then set_title "Minecraft Education"
 elif [[ "$1" == "weston-terminal" ]]; then set_title "Weston Terminal"
+elif [[ "$(basename "$1")" == "firefox.real" ]]; then set_title "Tor Browser"
 else set_title "$(basename "$1" | sed 's/./\u&/' | sed 's/-/ /g')"
 fi
 
