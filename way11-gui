@@ -31,7 +31,9 @@ if [[ "$1" == "settings" ]]; then
 		--center --height=400 --width=300 \
 		--field="Override all custom app settings:CHK" FALSE \
 		--field="Open all apps maximised:CHK" FALSE \
-		--field="Hide all window controls:CHK" FALSE)
+		--field="Hide all window controls:CHK" FALSE \
+		--field="Window width" "" \
+		--field="Window height" "")
 	
 	if [[ "$(echo $settings | awk -F'|' '{print $1}')" == "TRUE" ]]; then
 		export WAY11_DISABLECUSTOM=1
@@ -44,9 +46,19 @@ if [[ "$1" == "settings" ]]; then
 		export WAY11_WINDOW=min
 	fi
 	if [[ "$(echo $settings | awk -F'|' '{print $3}')" == "TRUE" ]]; then
-		export WAY11_HIDECONTROLS=max
+		export WAY11_HIDECONTROLS=1
 	else
-		export WAY11_HIDECONTROLS=min
+		export WAY11_HIDECONTROLS=0
+	fi
+	if [[ "$(echo $settings | awk -F'|' '{print $4}')" != "" ]]; then
+		export WAY11_WIDTH="$(echo $settings | awk -F'|' '{print $4}')"
+	else
+		export WAY11_WIDTH=""
+	fi
+	if [[ "$(echo $settings | awk -F'|' '{print $5}')" != "" ]]; then
+		export WAY11_HEIGHT="$(echo $settings | awk -F'|' '{print $5}')"
+	else
+		export WAY11_HEIGHT=""
 	fi
 
 	./way11-gui

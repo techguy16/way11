@@ -39,6 +39,15 @@ elif [[ "$1" == "firefox"* ]]; then
     args+=("--height" "768" "--width" "1024")
 fi
 
+if [[ "$WAY11_HEIGHT" != "" ]]; then
+    args+=("--height" "$WAY11_HEIGHT")
+fi
+if [[ "$WAY11_WIDTH" != "" ]]; then
+    args+=("--width" "$WAY11_WIDTH")
+fi
+
+echo "Ratio: $WAY11_WIDTH x $WAY11_HEIGHT"
+
 echo "Loading weston on $WAYLAND_DISPLAY..."
 XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" weston --config="$XDG_RUNTIME_DIR_WESTON/weston.ini" --backend=x11-backend.so --socket=$WAYLAND_DISPLAY "${args[@]}" > /dev/null 2>&1 & 
 WESTON_PID=$!
