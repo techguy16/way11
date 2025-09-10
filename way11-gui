@@ -15,6 +15,17 @@ if [ ! -d "apps" ]; then
 	fi
 fi
 
+if [ -e "way11" ]; then
+	chmod +x way11
+	export WAY11_EXECUTABLE="./way11"
+elif [ -x "$(command -v way11)" ]; then
+	export WAY11_EXECUTABLE="way11"
+else
+	yad --title="Way11" --center --width=300 --height=50 \
+		--text="Could not find way11 executable!\nPlease reinstall way11." --button="OK":0 --borders=10
+	exit 0
+fi
+
 apps=()
 for i in ./apps/*; do
 	if [[ "$i" != *"icons" ]]; then
@@ -27,7 +38,7 @@ done
 if [[ "$1" == "settings" ]]; then
 	pkill -f "yad*"
 	
-	settings=$(yad --title="way11" --text="<big><b>Settings</b></big>" --form \
+	settings=$(yad --title="way11" --text="<big><b>Current session settings</b></big>" --form \
 		--center --height=400 --width=300 \
 		--field="Override all custom app settings:CHK" FALSE \
 		--field="Open all apps maximised:CHK" FALSE \
@@ -64,10 +75,12 @@ if [[ "$1" == "settings" ]]; then
 	./way11-gui
 else 
 	data=$(yad --title="way11" --center --width=300 --height=400 \
+		--text="Select an app from the list below to launch it in way11." \
 		--list --icon-size=32 --column="Icon:IMG" --column="App" \
 		--button="Settings!open-menu:./way11-gui settings" \
 		--button="<b>Execute</b>!go-next:0" \
-		--no-headers "${apps[@]}")
+		--no-headers --image="assets/logo-64.png" --window-icon="assets/logo-64.png" \
+		--image-on-top --class="way11" "${apps[@]}")
 	EXVAL=$?
 
 	if [ $EXVAL -eq 0 ]; then
