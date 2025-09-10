@@ -33,6 +33,10 @@ if [[ "$1" == "google-chrome"* ]]; then
     app_args+=("--start-maximized")
 elif [[ "$1" == "spotify" ]] || [[ "$1" == "code" ]]; then
     app_args+=("--enable-features=UseOzonePlatform" "--ozone-platform=wayland")
+elif [[ "$1" == "weston-terminal" ]]; then
+    app_args+=("-f")
+elif [[ "$1" == "firefox"* ]]; then
+    args+=("--height" "768" "--width" "1024")
 fi
 
 echo "Loading weston on $WAYLAND_DISPLAY..."
@@ -47,20 +51,22 @@ sleep 0.2 #wait to destroy title?
 
 WESTON_WINID=$(wmctrl -l | grep "Weston Compositor" | awk -F " " '{print $1}' | head -n 1)
 
-if [[ "$1" == "waydroid" ]] && [[ "$2" == "show-full-ui" ]]; then
-    wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
-elif [[ "$WAY11_WINDOW" == "max" ]]; then
-    wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
-fi
-
 # Special app stuff...
-if [[ "$1" != "waydroid" ]]; then
-    if [[ "$WAY11_HIDECONTROLS" == "1" ]]; then
-        xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+if [[ "$WAY11_DISABLECUSTOM" != 1 ]]; then
+    if [[ "$1" == "waydroid" ]] && [[ "$2" == "show-full-ui" ]]; then
+        wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
+    elif [[ "$WAY11_WINDOW" == "max" ]]; then
+        wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
     fi
-else
-    if [[ "$2" != "app" ]]; then
-        xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+
+    if [[ "$1" != "waydroid" ]]; then
+        if [[ "$WAY11_HIDECONTROLS" == "1" ]]; then
+            xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+        fi
+    else
+        if [[ "$2" != "app" ]]; then
+            xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+        fi
     fi
 fi
 
@@ -75,7 +81,8 @@ set_title() {
 if [[ "$1" == "google-chrome"* ]]; then set_title "Google Chrome"
 elif [[ "$1" == "epiphany" ]] || [[ "$1" == "epiphany-browser" ]]; then set_title "GNOME Web"
 elif [[ "$1" == "waydroid" ]] && [[ "$4" == "com.mojang.minecraftedu" ]]; then set_title "Minecraft Education"
-else set_title "$(basename "$1" | sed 's/./\u&/')"
+elif [[ "$1" == "weston-terminal" ]]; then set_title "Weston Terminal"
+else set_title "$(basename "$1" | sed 's/./\u&/' | sed 's/-/ /g')"
 fi
 
 XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland WAYLAND_DISPLAY="$WAYLAND_DISPLAY" "$@" "${app_args[@]}"
