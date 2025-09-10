@@ -1,12 +1,16 @@
-<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/1.png' align="right" height="270px">
-
 # way11
-
+<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/1.png' align="right" height="270px">
 Run Wayland-only apps on X11.
 
-## Installing
+### Installing
 
-To download way11, run the commands:
+Install prerequisites (Debian/Ubuntu):
+```
+sudo apt update
+sudo apt install weston yad wmctrl x11-utils
+```
+
+Then, to download way11, run the commands:
 
 ```bash
 git clone https://github.com/techguy16/way11 ~/way11
@@ -20,7 +24,7 @@ To open way11's GUI: `~/way11/way11-gui`
 
 ### How?
 
-Weston (a Wayland compositor) can run in a windowed form, which allows us to run apps like they're natively running on X11.
+Weston (a Wayland compositor) can run in a windowed form, which allows us to run apps like they're natively running on X11. way11 
 
 ### Why?
 
@@ -43,6 +47,4 @@ In `way11-gui`'s settings, there are a few options to customise the look of West
 
 ### Screenshots
 
-<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/2.png' width="330px">
-
-<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/3.png' width="330px">
+<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/2.png' width="330px"><img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/3.png' width="330px">
