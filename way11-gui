@@ -1,5 +1,20 @@
 #!/bin/bash
 
+if [ ! -d "apps" ]; then
+	cd "$HOME/way11"
+	if [ ! -d "apps" ]; then
+		cd "$HOME/.techguy16/way11"
+		if [ ! -d "apps" ]; then
+			cd "$WAY11_APPSDIR"
+			if [ ! -d "apps" ] || [ ! -d "../apps" ]; then
+				yad --title="Way11" --center --width=300 --height=50 \
+					--text="Could not find app info directory!" --button="OK":0 --borders=10
+				exit 0
+			fi
+		fi
+	fi
+fi
+
 apps=()
 for i in ./apps/*; do
 	if [[ "$i" != *"icons" ]]; then
@@ -9,14 +24,42 @@ for i in ./apps/*; do
 	fi
 done
 
-data=$(yad --title="way11" --center --width=300 --height=400 \
-		--list --icon-size=32 --column="Icon:IMG" --column="App" --button="<b>Execute</b>!gtk-execute:0" \
-		--no-headers "${apps[@]}")
-EXVAL=$?
+if [[ "$1" == "settings" ]]; then
+	pkill -f "yad*"
+	
+	settings=$(yad --title="way11" --text="<big><b>Settings</b></big>" --form --center --height=400 --width=300 \
+		--field="Override all custom app settings:CHK" FALSE \
+		--field="Open all apps maximised:CHK" FALSE \
+		--field="Hide all window controls:CHK" FALSE)
+	
+	if [[ "$(echo $settings | awk -F'|' '{print $1}')" == "TRUE" ]]; then
+		export WAY11_DISABLECUSTOM=1
+	else
+		export WAY11_DISABLECUSTOM=0
+	fi
+	if [[ "$(echo $settings | awk -F'|' '{print $2}')" == "TRUE" ]]; then
+		export WAY11_WINDOW=max
+	else
+		export WAY11_WINDOW=min
+	fi
+	if [[ "$(echo $settings | awk -F'|' '{print $3}')" == "TRUE" ]]; then
+		export WAY11_HIDECONTROLS=max
+	else
+		export WAY11_HIDECONTROLS=min
+	fi
 
-if [ $EXVAL -eq 0 ]; then
-	app=$(echo $data | awk -F'|' '{print $2}')
-	directory="apps/$app"
-	command=$(cat "$directory")
-	./way11 $command
+	./way11-gui
+else 
+	data=$(yad --title="way11" --center --width=300 --height=400 \
+		--list --icon-size=32 --column="Icon:IMG" --column="App" --button="Settings:./way11-gui settings" \
+		--button="<b>Execute</b>!gtk-execute:0" \
+		--no-headers "${apps[@]}")
+	EXVAL=$?
+
+	if [ $EXVAL -eq 0 ]; then
+		app=$(echo $data | awk -F'|' '{print $2}')
+		directory="apps/$app"
+		command=$(cat "$directory")
+		./way11 $command
+	fi
 fi

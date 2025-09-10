@@ -59,6 +59,10 @@ if [[ "$WAY11_DISABLECUSTOM" != 1 ]]; then
         wmctrl -r "Weston Compositor - screen0" -b add,maximized_vert,maximized_horz
     fi
 
+    if [[ "$WAY11_HIDECONTROLS" == "1" ]]; then
+        xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
+    fi
+    
     if [[ "$1" != "waydroid" ]]; then
         if [[ "$WAY11_HIDECONTROLS" == "1" ]]; then
             xprop -id "$WESTON_WINID" -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x0, 0x0, 0x0"
