@@ -38,13 +38,25 @@ done
 if [[ "$1" == "settings" ]]; then
 	pkill -f "yad*"
 	
+	OPTION1="FALSE"
+	if [[ "$WAY11_DISABLECUSTOM" == "1" ]]; then OPTION1="TRUE" 
+	fi
+
+	OPTION2="FALSE"
+	if [[ "$WAY11_WINDOW" == "max" ]]; then OPTION2="TRUE" 
+	fi
+
+	OPTION3="FALSE"
+	if [[ "$WAY11_HIDECONTROLS" == "1" ]]; then OPTION3="TRUE" 
+	fi
+
 	settings=$(yad --title="way11" --text="<big><b>Current session settings</b></big>" --form \
 		--center --height=400 --width=300 \
-		--field="Override all custom app settings:CHK" FALSE \
-		--field="Open all apps maximised:CHK" FALSE \
-		--field="Hide all window controls:CHK" FALSE \
-		--field="Window width" "" \
-		--field="Window height" "")
+		--field="Override all custom app settings:CHK" "$OPTION1" \
+		--field="Open all apps maximised:CHK" "$OPTION2" \
+		--field="Hide all window controls:CHK" "$OPTION3" \
+		--field="Window width" "$WAY11_WIDTH" \
+		--field="Window height" "$WAY11_HEIGHT")
 	
 	if [[ "$(echo $settings | awk -F'|' '{print $1}')" == "TRUE" ]]; then
 		export WAY11_DISABLECUSTOM=1
