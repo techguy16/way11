@@ -1,9 +1,16 @@
-# way11
-<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/1.png' align="right" height="270px">
-Run Wayland-only apps on X11.
+<p align="center">
+  <img src="https://github.com/techguy16/way11/blob/main/assets/banner.png?raw=true" alt="way11 logo" style="height:100px;"><br>
+  <b>Run Wayland-only apps on X11.</b>
+</p>
 
 ### Installing
+[<img src='https://github.com/techguy16/LinStore/blob/main/images/badge.png?raw=true' align=right>](https://github.com/techguy16/LinStore)
 
+You can install way11 in two ways:
+* Using [LinStore](https://github.com/techguy16/LinStore) (**recommended**)
+* Manually (see below)
+
+#### Installing manually
 Install prerequisites (Debian/Ubuntu):
 ```
 sudo apt update
@@ -46,5 +53,4 @@ In `way11-gui`'s settings, there are a few options to customise the look of West
 * `Hide all window controls` - Hide Weston's titlebar
 
 ### Screenshots
-
-<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/2.png' width="330px"><img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/3.png' width="330px">
+<img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/1.png' width="150px"><img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/2.png' width="330px"><img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/3.png' width="330px">
