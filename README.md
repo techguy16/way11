@@ -1,16 +1,32 @@
 <p align="center">
-  <img src="https://github.com/techguy16/way11/blob/main/assets/banner.png?raw=true" alt="way11 logo" style="height:100px;"><br>
-  <b>Run Wayland-only apps on X11.</b>
+  <img src="https://github.com/techguy16/way11/blob/main/assets/banner.png?raw=true" alt="way11 logo" style="height:130px;">
+  <h3 align="center">Run Wayland-only apps on X11.</h3>
 </p>
 
-### Installing
+<p align="center">
+    <a href="https://github.com/techguy16/way11/stargazers"><img src="https://img.shields.io/github/stars/techguy16/way11"></a>
+    <a href="https://github.com/techguy16/way11/network/members"><img src="https://img.shields.io/github/forks/techguy16/way11"></a>
+    <a href="https://github.com/techguy16/way11/pulls"><img src="https://img.shields.io/github/issues-pr/techguy16/way11"></a>
+    <a href="https://github.com/techguy16/way11/issues?q=is%3Aopen"><img src="https://img.shields.io/github/issues/techguy16/way11"></a>
+</p>
+
+# Get started
+
+## Install way11
 [<img src='https://github.com/techguy16/LinStore/blob/main/images/badge.png?raw=true' align=right>](https://github.com/techguy16/LinStore)
 
 You can install way11 in two ways:
 * Using [LinStore](https://github.com/techguy16/LinStore) (**recommended**)
 * Manually (see below)
 
-#### Installing manually
+### Installing using LinStore
+1. Install LinStore using the command in [the README](https://github.com/techguy16/LinStore)
+2. Open LinStore
+3. Navigate to **Tools**, then **way11**
+4. Press **Install**
+
+
+### Installing manually
 Install prerequisites (Debian/Ubuntu):
 ```
 sudo apt update
@@ -25,32 +41,40 @@ chmod +x ~/way11/way11
 chmod +x ~/way11/way11-gui
 ```
 
-To run way11: `~/way11/way11 <wayland app command>`
+## Launching way11
+How you launch way11 depends on the installation method.
 
-To open way11's GUI: `~/way11/way11-gui`
+1. **Installed using LinStore**
+    1. Find way11 in your desktop environment's app menu
+    2. Or, click **Open** in way11's "App Details" page
+2. **Installed manually**
+    * To run way11: `~/way11/way11 <wayland app command>`
+    * To open way11's GUI: `~/way11/way11-gui`
 
-### How?
+# FAQ
+### How does this work?
 
-Weston (a Wayland compositor) can run in a windowed form, which allows us to run apps like they're natively running on X11. way11 
+Weston (a Wayland compositor) can run in a windowed form, which allows us to run apps like they're natively running on X11. 
 
-### Why?
+### Why did you make this?
 
-There are many apps for Linux now that are Wayland-only, and as an (ancient) NVIDIA card user, these apps simply don't work for me.
+There are apps now for Linux that are Wayland-only, and as an (ancient) NVIDIA card user, these apps simply don't work for me.
 
-### Tested apps
+# Tested apps
 
-| App name | Works? | Tested on |
-|----------|--------|-----------|
-| Firefox | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 |
-| GNOME Web | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 |
-| Google Chrome | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 |
-| Waydroid | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 |
+| App name | Works? | Tested on | Issues |
+|----------|--------|-----------|--------|
+| Firefox | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 | |
+| GNOME Web | :warning: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 | When resizing, app might crash |
+| Google Chrome | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 | |
+| Tor Browser | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 | |
+| Waydroid | :white_check_mark: | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Pop%21_OS_Icon.svg/2048px-Pop%21_OS_Icon.svg.png" height="16px"> Pop!_OS 22.04<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Openlogo-debianV2.svg/1200px-Openlogo-debianV2.svg.png" height="16px"> Debian 13 | |
 
-### Settings options
+# Settings options
 In `way11-gui`'s settings, there are a few options to customise the look of Weston:
 * `Override all custom app settings` - Disable built-in customisations to apps, including Waydroid being full screen automatically
 * `Open all apps maximised` - Start Weston as a maximised window
 * `Hide all window controls` - Hide Weston's titlebar
 
-### Screenshots
+# Screenshots
 <img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/1.png' width="150px"><img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/2.png' width="330px"><img src='https://raw.githubusercontent.com/techguy16/way11/refs/heads/main/screenshots/3.png' width="330px">
